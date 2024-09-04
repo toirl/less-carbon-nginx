@@ -23,3 +23,34 @@ That is a very interesting question that I would like to answer.
 Within this repository I want to create a transparent measurement setting to
 bring more light into this question, and of course, to learn more about
 measurements.
+
+## Setup
+
+My plan:
+
+Use [[Green Metrics Tool]](https://docs.green-coding.io) for Tests on [Hosted Service](https://metrics.green-coding.io)
+To make this happen the following things must be done:
+
+- Use docker image with a slim Nginx Setup
+- Use "stress" image with a [wrk](https://github.com/wg/wrk) installed to stress the server
+- Create testdata to be served by the server.
+- Create a `usage_scenario.yml` file with flow to stress Nginx by loading this test files.
+- Run the tests in different configuration (compression enabled/disabled)
+
+### Testdata
+
+There are three different types of data in different sizes (1kB, 10kB, 100kB, 1MB, 10MB):
+
+- Textfiles with repetitive content (easily compressible)
+- Textfiles with random content (poorly compressible)
+- Textfiles with binary content (e.g. JPEG)
+
+Testdata can be (re)generated with
+
+```sh
+sh ./generate-testdata.sh
+```
+
+## Results
+
+TBD
