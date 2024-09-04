@@ -1,3 +1,4 @@
 # syntax=docker/dockerfile:1
 FROM nginx:1.27.1-alpine-slim
+EXPOSE 80
 COPY testdata /usr/share/nginx/html
