@@ -1,0 +1,259 @@
+name: Nginx compression tests
+author: Torsten Irländer <torsten@irlaender.de>
+description: Load files from ngnix
+
+networks:
+  nginx-stress-network:
+
+services:
+  nginx-gzip-off:
+    build:
+      context: .
+      dockerfile: Dockerfile-nginx
+    container_name: green-nginx-gzip-off
+    image: green-nginx:latest
+    restart: always
+    expose:
+      - 80
+    networks:
+      - nginx-stress-network
+    volumes:
+      - ./nginx-gzip-off.conf:/etc/nginx/nginx.conf
+  nginx-gzip-on:
+    build:
+      context: .
+      dockerfile: Dockerfile-nginx
+    container_name: green-nginx-gzip-on
+    image: green-nginx:latest
+    restart: always
+    expose:
+      - 80
+    networks:
+      - nginx-stress-network
+    volumes:
+      - ./nginx-gzip-on.conf:/etc/nginx/nginx.conf
+  stress:
+    build:
+      context: .
+      dockerfile: Dockerfile-stress
+    container_name: green-nginx-stress
+    image: green-nginx-stress:latest
+    networks:
+      - nginx-stress-network
+flow:
+  - name: Stress uncompressed
+    container: green-nginx-stress
+    commands:
+      - type: console
+        command: wrk -d5s -t4 -c100 http://green-nginx-gzip-off/repetitive_1024B.txt
+        read-notes-stdout: true
+        note: Stress repetitive_1024B
+      - type: console
+        command: sleep 10
+        note: Idling
+      - type: console
+        command: wrk -d5s -t4 -c100 http://green-nginx-gzip-off/repetitive_10240B.txt
+        read-notes-stdout: true
+        note: Stress repetitive_10240B
+      - type: console
+        command: sleep 10
+        note: Idling
+      - type: console
+        command: wrk -d5s -t4 -c100 http://green-nginx-gzip-off/repetitive_102400B.txt
+        read-notes-stdout: true
+        note: Stress repetitive_102400B
+      - type: console
+        command: sleep 10
+        note: Idling
+      - type: console
+        command: wrk -d5s -t4 -c100 http://green-nginx-gzip-off/repetitive_1048576B.txt
+        read-notes-stdout: true
+        note: Stress repetitive_1048576B
+      - type: console
+        command: sleep 10
+        note: Idling
+      - type: console
+        command: wrk -d5s -t4 -c100 http://green-nginx-gzip-off/repetitive_10485760B.txt
+        read-notes-stdout: true
+        note: Stress repetitive_10485760B
+      - type: console
+        command: sleep 10
+        note: Idling
+      - type: console
+        command: wrk -d5s -t4 -c100 http://green-nginx-gzip-off/random_1024B.txt
+        read-notes-stdout: true
+        note: Stress random_1024B
+      - type: console
+        command: sleep 10
+        note: Idling
+      - type: console
+        command: wrk -d5s -t4 -c100 http://green-nginx-gzip-off/random_10240B.txt
+        read-notes-stdout: true
+        note: Stress random_10240B
+      - type: console
+        command: sleep 10
+        note: Idling
+      - type: console
+        command: wrk -d5s -t4 -c100 http://green-nginx-gzip-off/random_102400B.txt
+        read-notes-stdout: true
+        note: Stress random_102400B
+      - type: console
+        command: sleep 10
+        note: Idling
+      - type: console
+        command: wrk -d5s -t4 -c100 http://green-nginx-gzip-off/random_1048576B.txt
+        read-notes-stdout: true
+        note: Stress random_1048576B
+      - type: console
+        command: sleep 10
+        note: Idling
+      - type: console
+        command: wrk -d5s -t4 -c100 http://green-nginx-gzip-off/random_10485760B.txt
+        read-notes-stdout: true
+        note: Stress random_10485760B
+      - type: console
+        command: sleep 10
+        note: Idling
+      - type: console
+        command: wrk -d5s -t4 -c100 http://green-nginx-gzip-off/binary_1024B.txt
+        read-notes-stdout: true
+        note: Stress binary_1024B
+      - type: console
+        command: sleep 10
+        note: Idling
+      - type: console
+        command: wrk -d5s -t4 -c100 http://green-nginx-gzip-off/binary_10240B.txt
+        read-notes-stdout: true
+        note: Stress binary_10240B
+      - type: console
+        command: sleep 10
+        note: Idling
+      - type: console
+        command: wrk -d5s -t4 -c100 http://green-nginx-gzip-off/binary_102400B.txt
+        read-notes-stdout: true
+        note: Stress binary_102400B
+      - type: console
+        command: sleep 10
+        note: Idling
+      - type: console
+        command: wrk -d5s -t4 -c100 http://green-nginx-gzip-off/binary_1048576B.txt
+        read-notes-stdout: true
+        note: Stress binary_1048576B
+      - type: console
+        command: sleep 10
+        note: Idling
+      - type: console
+        command: wrk -d5s -t4 -c100 http://green-nginx-gzip-off/binary_10485760B.txt
+        read-notes-stdout: true
+        note: Stress binary_10485760B
+      - type: console
+        command: sleep 10
+        note: Idling
+  - name: Stress compressed
+    container: green-nginx-stress
+    commands:
+      - type: console
+        command: wrk -d5s -t4 -c100 http://green-nginx-gzip-on/repetitive_1024B.txt
+        read-notes-stdout: true
+        note: Stress repetitive_1024B
+      - type: console
+        command: sleep 10
+        note: Idling
+      - type: console
+        command: wrk -d5s -t4 -c100 http://green-nginx-gzip-on/repetitive_10240B.txt
+        read-notes-stdout: true
+        note: Stress repetitive_10240B
+      - type: console
+        command: sleep 10
+        note: Idling
+      - type: console
+        command: wrk -d5s -t4 -c100 http://green-nginx-gzip-on/repetitive_102400B.txt
+        read-notes-stdout: true
+        note: Stress repetitive_102400B
+      - type: console
+        command: sleep 10
+        note: Idling
+      - type: console
+        command: wrk -d5s -t4 -c100 http://green-nginx-gzip-on/repetitive_1048576B.txt
+        read-notes-stdout: true
+        note: Stress repetitive_1048576B
+      - type: console
+        command: sleep 10
+        note: Idling
+      - type: console
+        command: wrk -d5s -t4 -c100 http://green-nginx-gzip-on/repetitive_10485760B.txt
+        read-notes-stdout: true
+        note: Stress repetitive_10485760B
+      - type: console
+        command: sleep 10
+        note: Idling
+      - type: console
+        command: wrk -d5s -t4 -c100 http://green-nginx-gzip-on/random_1024B.txt
+        read-notes-stdout: true
+        note: Stress random_1024B
+      - type: console
+        command: sleep 10
+        note: Idling
+      - type: console
+        command: wrk -d5s -t4 -c100 http://green-nginx-gzip-on/random_10240B.txt
+        read-notes-stdout: true
+        note: Stress random_10240B
+      - type: console
+        command: sleep 10
+        note: Idling
+      - type: console
+        command: wrk -d5s -t4 -c100 http://green-nginx-gzip-on/random_102400B.txt
+        read-notes-stdout: true
+        note: Stress random_102400B
+      - type: console
+        command: sleep 10
+        note: Idling
+      - type: console
+        command: wrk -d5s -t4 -c100 http://green-nginx-gzip-on/random_1048576B.txt
+        read-notes-stdout: true
+        note: Stress random_1048576B
+      - type: console
+        command: sleep 10
+        note: Idling
+      - type: console
+        command: wrk -d5s -t4 -c100 http://green-nginx-gzip-on/random_10485760B.txt
+        read-notes-stdout: true
+        note: Stress random_10485760B
+      - type: console
+        command: sleep 10
+        note: Idling
+      - type: console
+        command: wrk -d5s -t4 -c100 http://green-nginx-gzip-on/binary_1024B.txt
+        read-notes-stdout: true
+        note: Stress binary_1024B
+      - type: console
+        command: sleep 10
+        note: Idling
+      - type: console
+        command: wrk -d5s -t4 -c100 http://green-nginx-gzip-on/binary_10240B.txt
+        read-notes-stdout: true
+        note: Stress binary_10240B
+      - type: console
+        command: sleep 10
+        note: Idling
+      - type: console
+        command: wrk -d5s -t4 -c100 http://green-nginx-gzip-on/binary_102400B.txt
+        read-notes-stdout: true
+        note: Stress binary_102400B
+      - type: console
+        command: sleep 10
+        note: Idling
+      - type: console
+        command: wrk -d5s -t4 -c100 http://green-nginx-gzip-on/binary_1048576B.txt
+        read-notes-stdout: true
+        note: Stress binary_1048576B
+      - type: console
+        command: sleep 10
+        note: Idling
+      - type: console
+        command: wrk -d5s -t4 -c100 http://green-nginx-gzip-on/binary_10485760B.txt
+        read-notes-stdout: true
+        note: Stress binary_10485760B
+      - type: console
+        command: sleep 10
+        note: Idling

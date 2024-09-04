@@ -1,0 +1,44 @@
+networks:
+  nginx-stress-network:
+
+services:
+  nginx-gzip-off:
+    build:
+      context: .
+      dockerfile: Dockerfile-nginx
+    container_name: green-nginx-gzip-off
+    image: green-nginx:latest
+    restart: always
+    expose:
+      - 80
+    networks:
+      - nginx-stress-network
+    volumes:
+      - ./nginx-gzip-off.conf:/etc/nginx/nginx.conf
+  nginx-gzip-on:
+    build:
+      context: .
+      dockerfile: Dockerfile-nginx
+    container_name: green-nginx-gzip-on
+    image: green-nginx:latest
+    restart: always
+    expose:
+      - 80
+    networks:
+      - nginx-stress-network
+    volumes:
+      - ./nginx-gzip-on.conf:/etc/nginx/nginx.conf
+    # volumes:
+    #   - nginx-gzip-off.conf:/etc/nginx/nginx.conf
+  stress:
+    build:
+      context: .
+      dockerfile: Dockerfile-stress
+    container_name: green-nginx-stress
+    image: green-nginx-stress:latest
+    networks:
+      - nginx-stress-network
+    # volumes:
+    #   - .:/data/
+    # entrypoint: ""
+    # command: "sh /data/run-test.sh"
