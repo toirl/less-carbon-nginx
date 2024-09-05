@@ -53,4 +53,21 @@ sh ./generate-testdata.sh
 
 ## Results
 
-TBD
+> Wer misst misst Mist
+
+A german saying that states that often measurements lead to confusion as the are probably done wrong.
+
+That's true and that is the reason why I want to be transparent on the process here.
+
+Here is a short history of different measurement settings and (probably wrong findings).
+
+### v0.1.0
+
+First measurement. Result only shows that measurement setting is wrong.
+
+Too much load on the sever. Can not seen any difference whether I load small,
+large or compressed or uncompressed files. wrk seems to put the server under
+heavy load. Server is at 100% no matter what phase in test.
+
+Conclusion: Find a better setting. I want to be able to see a difference in
+workload between sending a uncompressed 1KB file and a compressed 10MB file.
