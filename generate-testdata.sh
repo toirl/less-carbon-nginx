@@ -18,7 +18,7 @@ generate_random_text() {
 
 # Function to generate binary data (e.g. JPEG)
 generate_binary_data() {
-  dd if=/dev/urandom bs=1 count=$1 status=none | base64 >testdata/binary_$1B.jpg
+  dd if=/dev/urandom bs=1 count=$1 status=none | base64 | head -c $1 >testdata/binary_$1B.jpg
 }
 
 # Generate files
