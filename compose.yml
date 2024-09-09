@@ -11,6 +11,8 @@ services:
     restart: always
     expose:
       - 80
+    ports:
+      - 8080:80
     networks:
       - nginx-stress-network
     volumes:
@@ -24,12 +26,12 @@ services:
     restart: always
     expose:
       - 80
+    ports:
+      - 8080:80
     networks:
       - nginx-stress-network
     volumes:
       - ./nginx-gzip-on.conf:/etc/nginx/nginx.conf
-    # volumes:
-    #   - nginx-gzip-off.conf:/etc/nginx/nginx.conf
   stress:
     build:
       context: .
